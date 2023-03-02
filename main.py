@@ -75,19 +75,28 @@ is_on = True
 
 while is_on:
     choice = input("What would you like? (espresso/latte/cappuccino): ")
-    if choice == "off":
-        is_on = False
-    elif choice == "report":
-        print(f"Water: {resources['water']}ml")
-        print(f"Milk: {resources['milk']}ml")
-        print(f"Coffee: {resources['coffee']}g")
-        print(f"Money: ${profit}")
-    else:
-        drink = MENU[choice]
-        if is_resource_sufficient(drink["ingredients"]):
-            payment = process_coins()
-            if is_transaction_successful(payment, drink["cost"]):
-                make_coffee(choice, drink["ingredients"])
+    try:
+        if choice == "off":
+            is_on = False
+        elif choice == "report":
+            print(f"Water: {resources['water']}ml")
+            print(f"Milk: {resources['milk']}ml")
+            print(f"Coffee: {resources['coffee']}g")
+            print(f"Money: ${profit}")
+        elif choice == "resources":
+            for item in resources:
+                print(f"{item.capitalize()}: {resources[item]}")
+        elif choice in MENU:
+            drink = MENU[choice]
+            if is_resource_sufficient(drink["ingredients"]):
+                payment = process_coins()
+                if is_transaction_successful(payment, drink["cost"]):
+                    make_coffee(choice, drink["ingredients"])
+        else:
+            raise ValueError
+    except ValueError:
+        print("Valid options are: 'off','report','resources' or 'espresso','latte','cappuccino' to place an order")
+
 
 # TODO: 1. Print report of all coffee machine resources.
 
